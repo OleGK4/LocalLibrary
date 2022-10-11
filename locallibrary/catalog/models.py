@@ -77,7 +77,7 @@ class BookInstance(models.Model):
         String for representing the Model object
         """
         return '%s (%s)' % (self.id, self.book.title)
-sd = 0
+
 
 class Genre(models.Model):
     """
