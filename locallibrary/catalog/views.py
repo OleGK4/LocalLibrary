@@ -115,3 +115,14 @@ class AuthorUpdate(UpdateView):
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
+
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 10
+    template_name = 'author_list.html'
+    context_object_name = 'author_list'
