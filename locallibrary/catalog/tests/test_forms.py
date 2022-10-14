@@ -39,5 +39,3 @@ class RenewBookFormTest(TestCase):
         form_data = {'renewal_date': date}
         form = RenewBookForm(data=form_data)
         self.assertTrue(form.is_valid())
-
-
