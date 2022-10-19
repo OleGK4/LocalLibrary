@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
-from .models import Author
+from .models import Author, Book
 from .forms import RenewBookForm
 
 
@@ -42,7 +42,7 @@ class BookListView(generic.ListView):
     model = Book
     paginate_by = 10
     context_object_name = 'my_book_list'  # ваше собственное имя переменной контекста в шаблоне
-    template_name = 'books/my_arbitrary_template_name_list.html'  # Определение имени вашего шаблона и его расположения
+    template_name = 'books/book_list.html'  # Определение имени вашего шаблона и его расположения
 
     def get_context_data(self, **kwargs):
         # В первую очередь получаем базовую реализацию контекста
@@ -123,3 +123,21 @@ class AuthorListView(generic.ListView):
     paginate_by = 10
     template_name = 'author_list.html'
     context_object_name = 'author_list'
+
+
+# def BookEdit(request, id):
+#     book = Book.get_absolute_url(id=id)
+#
+#     if request.method == 'POST':
+#         form = BookForm(request.POST, instance=book)
+#         if form.is_valid():
+#             # update the existing `Band` in the database
+#             form.save()
+#             # redirect to the detail page of the `Band` we just updated
+#             return redirect('band-detail', band.id))
+#     else:
+#         form = BandForm(instance=band)
+#
+#     return render(request,
+#                 'listings/band_update.html',
+#                 {'form': form})
