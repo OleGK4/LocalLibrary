@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from django.forms import ModelForm
-from .models import BookInstance
+from .models import BookInstance, Book
 
 
 class RenewBookForm(forms.Form):
@@ -47,3 +47,7 @@ class RenewBookModelForm(ModelForm):
         fields = ['due_back', ]
         labels = {'due_back': _('Renewal date'), }
         help_texts = {'due_back': _('Enter a date between now and 4 weeks (default 3).'), }
+
+
+class BookForm(forms.Form):
+    model = Book
