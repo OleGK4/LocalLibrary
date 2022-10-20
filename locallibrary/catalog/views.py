@@ -16,20 +16,14 @@ from .forms import RenewBookForm
 
 
 def index(request):
-    """
-    Функция отображения для домашней страницы сайта.
-    """
-    # Генерация "количеств" некоторых главных объектов
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
-    # Доступные книги (статус = 'a')
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
-    num_authors = Author.objects.count()  # Метод 'all()' применён по умолчанию.
+    num_authors = Author.objects.count()
     num_books_micro = Book.objects.filter(title="Microworld").count()
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
-    # Отрисовка HTML-шаблона index.html с данными внутри
-    # переменной контекста context
+
     return render(
         request,
         'index.html',
@@ -46,9 +40,8 @@ class BookListView(generic.ListView):
     template_name = 'books/book_list.html'  # Определение имени вашего шаблона и его расположения
 
     def get_context_data(self, **kwargs):
-        # В первую очередь получаем базовую реализацию контекста
         context = super(BookListView, self).get_context_data(**kwargs)
-        # Добавляем новую переменную к контексту и инициализируем её некоторым значением
+
         context['some_data'] = 'This is just some data'
         return context
 
@@ -58,9 +51,6 @@ class BookDetailView(generic.DetailView):
 
 
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
-    """
-    Generic class-based view listing books on loan to current user.
-    """
     model = BookInstance
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
@@ -71,27 +61,19 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
 
 @permission_required('catalog.can_mark_returned')
 def renew_book_librarian(request, pk):
-    """
-    View function for renewing a specific BookInstance by librarian
-    """
     book_inst = get_object_or_404(BookInstance, pk=pk)
 
-    # If this is a POST request then process the Form data
     if request.method == 'POST':
 
-        # Create a form instance and populate it with data from the request (binding):
         form = RenewBookForm(request.POST)
 
-        # Check if the form is valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
             book_inst.due_back = form.cleaned_data['renewal_date']
             book_inst.save()
 
-            # redirect to a new URL:
             return HttpResponseRedirect(reverse('all-borrowed'))
 
-    # If this is a GET (or any other method) create the default form.
+
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
         form = RenewBookForm(initial={'renewal_date': proposed_renewal_date, })
@@ -137,35 +119,7 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
 
 
-# def BookEdit(request, id):
-#     book = Book.get_absolute_url(id=id)
-#
-#     if request.method == 'POST':
-#         form = BookForm(request.POST, instance=book)
-#         if form.is_valid():
-#             # update the existing `Band` in the database
-#             form.save()
-#             # redirect to the detail page of the `Band` we just updated
-#             return redirect('book-detail', band.id))
-#     else:
-#         form = BandForm(instance=band)
-#
-#     return render(request,
-#                 'listings/band_update.html',
-#                 {'form': form})
-
-
-# def BookEdit(request, id):
-#     book = Book.objects.get(id=id)
-#     form = BookForm(request.POST, instance=book)
-#     if form.is_valid():
-#         form.save()
-#         return redirect('book_list', book.id)
-#     return render(request, 'book_list_form.html', {'form': form})
-
 class BookUpdateView(UpdateView):
     model = Book
     fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
     template_name_suffix = '_list_form'
-
-

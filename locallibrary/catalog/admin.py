@@ -38,6 +38,3 @@ class BookInstanceAdmin(admin.ModelAdmin):
             'fields': ('status', 'due_back', 'borrower')
         }),
     )
-
-# admin.site.register(BookInstance)
-# Register your models here.

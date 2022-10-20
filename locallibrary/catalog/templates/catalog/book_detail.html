@@ -24,7 +24,7 @@
   </div>
 <hr>
 {% if user.is_superuser %}
-<a href="{% url 'edit-book' book.id %}">Edit this Book</a>
+  <a href="{% url 'edit-book' book.id %}">Edit this Book</a>
 {% endif %}
 {% endblock %}
 
