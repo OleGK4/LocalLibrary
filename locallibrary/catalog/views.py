@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .models import Author, Book
-from .forms import RenewBookForm, BookForm
+from .forms import RenewBookForm
 
 
 def index(request):
@@ -137,7 +137,35 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
 
 
+# def BookEdit(request, id):
+#     book = Book.get_absolute_url(id=id)
+#
+#     if request.method == 'POST':
+#         form = BookForm(request.POST, instance=book)
+#         if form.is_valid():
+#             # update the existing `Band` in the database
+#             form.save()
+#             # redirect to the detail page of the `Band` we just updated
+#             return redirect('book-detail', band.id))
+#     else:
+#         form = BandForm(instance=band)
+#
+#     return render(request,
+#                 'listings/band_update.html',
+#                 {'form': form})
+
+
+# def BookEdit(request, id):
+#     book = Book.objects.get(id=id)
+#     form = BookForm(request.POST, instance=book)
+#     if form.is_valid():
+#         form.save()
+#         return redirect('book_list', book.id)
+#     return render(request, 'book_list_form.html', {'form': form})
+
 class BookUpdateView(UpdateView):
     model = Book
     fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
     template_name_suffix = '_list_form'
+
+

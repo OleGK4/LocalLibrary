@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1>Title: {{ book.title }}</h1>
-
+<hr>
   <p><strong>Author:</strong> <a href="{% url 'author-detail' book.author.pk %}">{{ book.author }}</a></p> <!-- author detail link not yet defined -->
   <p><strong>Summary:</strong> {{ book.summary }}</p>
   <p><strong>ISBN:</strong> {{ book.isbn }}</p>
@@ -21,9 +21,10 @@
     <p class="text-muted"><strong>Id:</strong> {{copy.id}}</p>
     {% endfor %}
 
-    <a href="{% url 'edit-book' book.id %}">Edit this Book</a>
-
-
   </div>
+<hr>
+{% if user.is_superuser %}
+<a href="{% url 'edit-book' book.id %}">Edit this Book</a>
+{% endif %}
 {% endblock %}
 
